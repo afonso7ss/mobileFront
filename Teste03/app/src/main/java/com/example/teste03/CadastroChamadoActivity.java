@@ -14,7 +14,7 @@ public class CadastroChamadoActivity extends AppCompatActivity {
 
     private EditText etLocal, etDescricao;
     private Spinner spinnerCategoria;
-    private Button btnEnviar, btnVerHistorico;
+    private Button btnEnviar, btnVerHistorico, btnSair;
     public static ArrayList<Chamado> chamados = new ArrayList<>();
 
     @Override
@@ -27,6 +27,7 @@ public class CadastroChamadoActivity extends AppCompatActivity {
         spinnerCategoria = findViewById(R.id.spinnerCategoria);
         btnEnviar = findViewById(R.id.btnEnviar);
         btnVerHistorico = findViewById(R.id.btnVerHistorico);
+        btnSair = findViewById(R.id.btnSair);
 
         String[] categorias = {"ar-condicionado", "limpeza", "computadores", "estacionamento", "outros"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categorias);
@@ -53,6 +54,15 @@ public class CadastroChamadoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(CadastroChamadoActivity.this, HistoricoChamadoActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        btnSair.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CadastroChamadoActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }

@@ -6,6 +6,18 @@
     android:background="#033DC3"
     android:padding="16dp">
 
+    <!-- Botão Sair/Voltar -->
+    <Button
+        android:id="@+id/btnSair"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="#FF0000"
+        android:text="SAIR"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <!-- Título -->
     <TextView
         android:id="@+id/tvTituloCadastro"
@@ -16,7 +28,8 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="16dp" />
 
     <!-- Spinner de Categoria -->
     <TextView
