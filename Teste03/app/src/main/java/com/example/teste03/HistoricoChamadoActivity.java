@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.graphics.Color;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.teste03.models.Chamado;
 
 public class HistoricoChamadoActivity extends AppCompatActivity {
 
@@ -22,8 +23,25 @@ public class HistoricoChamadoActivity extends AppCompatActivity {
         linearLayoutHistorico = findViewById(R.id.linearLayoutHistorico);
         btnVoltar = findViewById(R.id.btnVoltar);
 
+        btnVoltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { finish(); }
+        });
+
+        populateHistorico();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        populateHistorico();
+    }
+
+    private void populateHistorico() {
+        linearLayoutHistorico.removeAllViews(); // Limpa as views existentes
+
         for (int i = 0; i < CadastroChamadoActivity.chamados.size(); i++) {
-            CadastroChamadoActivity.Chamado chamado = CadastroChamadoActivity.chamados.get(i);
+            Chamado chamado = CadastroChamadoActivity.chamados.get(i);
 
             LinearLayout layoutChamado = new LinearLayout(this);
             layoutChamado.setOrientation(LinearLayout.HORIZONTAL);
@@ -38,14 +56,16 @@ public class HistoricoChamadoActivity extends AppCompatActivity {
             paramsStatus.setMargins(0, 0, 16, 0);
             statusView.setLayoutParams(paramsStatus);
 
-            if (chamado.status.equals("pendente")) {
-                statusView.setBackgroundColor(Color.RED);
+            // Define a cor do status com base no booleano
+            if (!chamado.isStatus()) {
+                statusView.setBackgroundColor(Color.RED); // Pendente
             } else {
-                statusView.setBackgroundColor(Color.GREEN);
+                statusView.setBackgroundColor(Color.GREEN); // Resolvido
             }
 
             TextView textView = new TextView(this);
-            textView.setText("Categoria: " + chamado.categoria + "\nLocal: " + chamado.local + "\nDescrição: " + chamado.descricao);
+            String status = chamado.isStatus() ? "Resolvido" : "Em Aberto";
+            textView.setText("Categoria: " + chamado.getCategoria() + "\nLocal: " + chamado.getLocal() + "\nDescrição: " + chamado.getDescricao() + "\nStatus: " + status);
             textView.setTextColor(getResources().getColor(android.R.color.black));
             textView.setTextSize(16f);
 
@@ -64,12 +84,5 @@ public class HistoricoChamadoActivity extends AppCompatActivity {
 
             linearLayoutHistorico.addView(layoutChamado);
         }
-
-        btnVoltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 }

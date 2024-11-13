@@ -7,7 +7,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.teste03.models.Chamado;
 import java.util.ArrayList;
 
 public class CadastroChamadoActivity extends AppCompatActivity {
@@ -38,13 +40,16 @@ public class CadastroChamadoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String categoria = spinnerCategoria.getSelectedItem().toString();
-                String local = etLocal.getText().toString();
-                String descricao = etDescricao.getText().toString();
+                String local = etLocal.getText().toString().trim();
+                String descricao = etDescricao.getText().toString().trim();
 
                 if (!local.isEmpty() && !descricao.isEmpty()) {
-                    chamados.add(new Chamado(categoria, local, descricao, "pendente"));
+                    chamados.add(new Chamado(categoria, local, descricao, 1)); // Defina um userId adequado
                     etLocal.setText("");
                     etDescricao.setText("");
+                    Toast.makeText(CadastroChamadoActivity.this, "Chamado enviado com sucesso!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(CadastroChamadoActivity.this, "Por favor, preencha todos os campos", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -52,8 +57,7 @@ public class CadastroChamadoActivity extends AppCompatActivity {
         btnVerHistorico.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CadastroChamadoActivity.this, HistoricoChamadoActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(CadastroChamadoActivity.this, HistoricoChamadoActivity.class));
             }
         });
 
@@ -62,22 +66,8 @@ public class CadastroChamadoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(CadastroChamadoActivity.this, LoginActivity.class);
                 startActivity(intent);
-                finish();
+                finishAffinity();
             }
         });
-    }
-
-    public static class Chamado {
-        String categoria;
-        String local;
-        String descricao;
-        String status;
-
-        Chamado(String categoria, String local, String descricao, String status) {
-            this.categoria = categoria;
-            this.local = local;
-            this.descricao = descricao;
-            this.status = status;
-        }
     }
 }
