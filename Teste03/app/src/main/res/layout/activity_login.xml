@@ -71,6 +71,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:backgroundTint="#033DC3"
+        android:onClick="test"
         android:padding="12dp"
         android:text="Entrar"
         android:textColor="#FFFFFF"
