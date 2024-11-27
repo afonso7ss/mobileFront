@@ -2,6 +2,7 @@ package com.example.teste03;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -9,6 +10,8 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,27 +42,42 @@ public class LoginActivity extends AppCompatActivity {
                 if (username.isEmpty() || password.isEmpty()) {
                     Toast.makeText(LoginActivity.this, "Por favor, preencha todos os campos", Toast.LENGTH_SHORT).show();
                 } else {
-                    loginUser(username, password);
+//                    loginUser(username, password);
+                    Log.v("logger", "deve mostrar o log");
+                    test(v);
                 }
             }
         });
     }
 
-    public void test(View v) {
-        ApiService apiService = RetrofitClient.getApiService();
-        Call call = apiService.test();
-        call.enqueue(new Callback() {
-            @Override
-            public void onResponse(Call call, Response response) {
-                //
-            }
 
-            @Override
-            public void onFailure(Call call, Throwable t) {
-                //
-            }
-        });
+
+    public void test(View v) {
+        try {
+            Log.v("logger", "entrou no test");
+            ApiService apiService = RetrofitClient.getApiService();
+            Call call = apiService.test();
+            call.enqueue(new Callback<List<User>>() {
+                @Override
+                public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                    if (response.isSuccessful()) {
+                        List<User> users = response.body();
+                        Log.v("logger", "login efetuado com sucesso");
+                    } else {
+                        Log.v("logger", "Erro: " + response.code());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call call, Throwable t) {
+                    Log.e("logger", "falhou o login", t);
+                }
+            });
+        } catch (Exception e) {
+            Log.e("logger", "Erro ao executar a requisição", e);
+        }
     }
+
     private void loginUser(String username, String password) {
         ApiService apiService = RetrofitClient.getApiService();
         LoginRequest loginRequest = new LoginRequest(username, password);
