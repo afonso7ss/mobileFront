@@ -6,9 +6,9 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 public interface ApiService {
-    @POST("auth/login")  // substitua pelo endpoint correto
+    @POST("auth/login")
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
 
     @GET("users")
-    Call<List<User>> test();
+    Call<List<User>> users();
 }
