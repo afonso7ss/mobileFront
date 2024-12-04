@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#033DC3"
@@ -23,13 +24,13 @@
         android:id="@+id/tvTituloCadastro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="Cadastro de Chamado"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintStart_toEndOf="@+id/btnSair"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Spinner de Categoria -->
     <TextView
@@ -46,8 +47,16 @@
         android:id="@+id/spinnerCategoria"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="5dp"
         android:background="#FDFDFD"
+        android:clickable="true"
+        android:clipToPadding="false"
+        android:focusable="auto"
+        android:layerType="software"
+        android:paddingStart="5dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvCategoria" />
@@ -70,6 +79,10 @@
         android:layout_marginTop="8dp"
         android:background="#FFFFFF"
         android:hint="Digite o local do problema"
+        android:includeFontPadding="false"
+        android:paddingStart="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -90,14 +103,21 @@
         android:id="@+id/etDescricao"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:background="#FFFFFF"
+        android:fontFamily="sans-serif"
         android:hint="Descreva o problema"
         android:minLines="3"
+        android:paddingStart="5dp"
+        android:paddingEnd="3dp"
+        android:paddingBottom="3dp"
+        android:textAlignment="viewStart"
         android:textColor="#000000"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvDescricao" />
+        app:layout_constraintTop_toBottomOf="@id/tvDescricao"
+        tools:visibility="visible" />
 
     <!-- Botão Enviar -->
     <Button
