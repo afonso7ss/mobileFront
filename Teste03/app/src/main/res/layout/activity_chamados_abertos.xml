@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
@@ -11,23 +12,53 @@
         android:id="@+id/tvChamadosAbertos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Chamados em Aberto"
+        android:layout_marginTop="16dp"
+        android:text="Chamados em Geral"
         android:textColor="#033DC3"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Lista de Chamados -->
     <ListView
         android:id="@+id/listChamadosAbertos"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/tvChamadosAbertos"
+        android:layout_marginTop="120dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvChamadosAbertos" />
+
+    <Button
+        android:id="@+id/ChmdAbertos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="25dp"
+        android:text="Abertos"
+        app:layout_constraintEnd_toStartOf="@+id/ChmdFEchado"
+        app:layout_constraintTop_toBottomOf="@+id/tvChamadosAbertos" />
+
+    <Button
+        android:id="@+id/ChmdFEchado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="Fechados"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tvChamadosAbertos"
+        app:layout_constraintTop_toBottomOf="@+id/tvChamadosAbertos" />
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:text="Sair"
+        app:layout_constraintBottom_toBottomOf="@id/ChmdAbertos"
+        app:layout_constraintEnd_toStartOf="@id/ChmdAbertos"
+        app:layout_constraintTop_toTopOf="@id/ChmdAbertos" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

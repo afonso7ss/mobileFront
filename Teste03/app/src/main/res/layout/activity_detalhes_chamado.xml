@@ -42,14 +42,5 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Botão de Resolver Chamado -->
-    <Button
-        android:id="@+id/btnResolverChamado"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Marcar como Resolvido"
-        app:layout_constraintTop_toBottomOf="@id/tvDetalhesDescricao"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

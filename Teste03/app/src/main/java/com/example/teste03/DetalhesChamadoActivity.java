@@ -19,7 +19,7 @@ public class DetalhesChamadoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detalhes_chamado);
 
         tvDetalhesDescricao = findViewById(R.id.tvDetalhesDescricao);
-        btnResolverChamado = findViewById(R.id.btnResolverChamado);
+//        btnResolverChamado = findViewById(R.id.btnResolverChamado);
 
         // Pegar o index do chamado passado pelo intent
         int index = getIntent().getIntExtra("index", -1);
@@ -28,18 +28,18 @@ public class DetalhesChamadoActivity extends AppCompatActivity {
             tvDetalhesDescricao.setText("Categoria: " + chamado.categoria + "\nLocal: " + chamado.local + "\nDescrição: " + chamado.descricao + "\nStatus: " + (chamado.status.equals("pendente") ? "Em Aberto" : "Resolvido"));
         }
 
-        btnResolverChamado.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Lógica para marcar o chamado como resolvido
-                if (chamado != null && chamado.status.equals("pendente")) {
-                    chamado.status = "resolvido";
-                    tvDetalhesDescricao.setText("Categoria: " + chamado.categoria + "\nLocal: " + chamado.local + "\nDescrição: " + chamado.descricao + "\nStatus: Resolvido");
-                    Toast.makeText(DetalhesChamadoActivity.this, "Chamado marcado como resolvido", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(DetalhesChamadoActivity.this, "Chamado já está resolvido", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+//        btnResolverChamado.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Lógica para marcar o chamado como resolvido
+//                if (chamado != null && chamado.status.equals("pendente")) {
+//                    chamado.status = "resolvido";
+//                    tvDetalhesDescricao.setText("Categoria: " + chamado.categoria + "\nLocal: " + chamado.local + "\nDescrição: " + chamado.descricao + "\nStatus: Resolvido");
+//                    Toast.makeText(DetalhesChamadoActivity.this, "Chamado marcado como resolvido", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(DetalhesChamadoActivity.this, "Chamado já está resolvido", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
     }
 }

@@ -2,13 +2,21 @@ package com.example.teste03;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.telecom.Call;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CadastroChamadoActivity extends AppCompatActivity {
 
@@ -16,6 +24,10 @@ public class CadastroChamadoActivity extends AppCompatActivity {
     private Spinner spinnerCategoria;
     private Button btnEnviar, btnVerHistorico, btnSair;
     public static ArrayList<Chamado> chamados = new ArrayList<>();
+
+    private EditText edtCategoria, edtLocal, edtDescricao;
+    private Switch switchStatus;
+    private Button btnCadastrarChamado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,14 +49,16 @@ public class CadastroChamadoActivity extends AppCompatActivity {
         btnEnviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String categoria = spinnerCategoria.getSelectedItem().toString();
-                String local = etLocal.getText().toString();
-                String descricao = etDescricao.getText().toString();
+                String edtCategoria = spinnerCategoria.getSelectedItem().toString();
+                String edtLocal = etLocal.getText().toString();
+                String edtDescricao = etDescricao.getText().toString();
+                btnCadastrarChamado = findViewById(R.id.btnEnviar);
 
-                if (!local.isEmpty() && !descricao.isEmpty()) {
-                    chamados.add(new Chamado(categoria, local, descricao, "pendente"));
+                if (!edtLocal.isEmpty() && !edtDescricao.isEmpty()) {
+                    chamados.add(new Chamado(edtCategoria, edtLocal, edtDescricao, "Aberto"));
                     etLocal.setText("");
                     etDescricao.setText("");
+                    btnCadastrarChamado.setOnClickListener(view -> cadastrarChamado());
                 }
             }
         });
@@ -65,6 +79,45 @@ public class CadastroChamadoActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void cadastrarChamado() {
+        String categoria = edtCategoria.getText().toString().trim();
+        String local = edtLocal.getText().toString().trim();
+        String descricao = edtDescricao.getText().toString().trim();
+        String status = switchStatus.isChecked() ? "true" : "false";
+
+        if (categoria.isEmpty() || local.isEmpty() || descricao.isEmpty()) {
+            Toast.makeText(this, "Por favor, preencha todos os campos!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Chamado chamado = new Chamado(categoria, local, descricao, status);
+        ApiService apiService = RetrofitClient.getApiService();
+        retrofit2.Call<Chamado> call = apiService.cadastrarChamado(chamado);
+        call.enqueue(new Callback<Chamado>() {
+            @Override
+            public void onResponse(retrofit2.Call<Chamado> call, Response<Chamado> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(CadastroChamadoActivity.this, "Chamado cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
+                    limparCampos();
+                } else {
+                    Toast.makeText(CadastroChamadoActivity.this, "Erro ao cadastrar chamado!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<Chamado> call, Throwable t) {
+                Toast.makeText(CadastroChamadoActivity.this, "", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void limparCampos() {
+        edtCategoria.setText("");
+        edtLocal.setText("");
+        edtDescricao.setText("");
+        switchStatus.setChecked(false);
     }
 
     public static class Chamado {

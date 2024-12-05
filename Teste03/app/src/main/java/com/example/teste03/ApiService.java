@@ -11,4 +11,10 @@ public interface ApiService {
 
     @GET("users")
     Call<List<User>> users();
+
+    @GET("chamados")
+    Call<List<CadastroChamadoActivity.Chamado>> chamados();
+
+    @POST("chamados/1")
+    Call<CadastroChamadoActivity.Chamado> cadastrarChamado(@Body CadastroChamadoActivity.Chamado chamado);
 }
