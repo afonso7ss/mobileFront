@@ -1,12 +1,12 @@
 package com.example.teste03;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.graphics.Color;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class HistoricoChamadoActivity extends AppCompatActivity {
@@ -22,6 +22,7 @@ public class HistoricoChamadoActivity extends AppCompatActivity {
         linearLayoutHistorico = findViewById(R.id.linearLayoutHistorico);
         btnVoltar = findViewById(R.id.btnVoltar);
 
+        // Percorre todos os chamados cadastrados
         for (int i = 0; i < CadastroChamadoActivity.chamados.size(); i++) {
             CadastroChamadoActivity.Chamado chamado = CadastroChamadoActivity.chamados.get(i);
 
@@ -38,14 +39,21 @@ public class HistoricoChamadoActivity extends AppCompatActivity {
             paramsStatus.setMargins(0, 0, 16, 0);
             statusView.setLayoutParams(paramsStatus);
 
-            if (chamado.status.equals("pendente")) {
+            // Se status = false (Em Aberto), pinta de vermelho
+            // Se status = true (Resolvido), pinta de verde
+            if (!chamado.status) {
                 statusView.setBackgroundColor(Color.RED);
             } else {
                 statusView.setBackgroundColor(Color.GREEN);
             }
 
+            String statusText = chamado.status ? "Resolvido" : "Em Aberto";
+
             TextView textView = new TextView(this);
-            textView.setText("Categoria: " + chamado.categoria + "\nLocal: " + chamado.local + "\nDescrição: " + chamado.descricao);
+            textView.setText("Categoria: " + chamado.categoria +
+                    "\nLocal: " + chamado.local +
+                    "\nDescrição: " + chamado.descricao +
+                    "\nStatus: " + statusText);
             textView.setTextColor(getResources().getColor(android.R.color.black));
             textView.setTextSize(16f);
 
@@ -65,11 +73,6 @@ public class HistoricoChamadoActivity extends AppCompatActivity {
             linearLayoutHistorico.addView(layoutChamado);
         }
 
-        btnVoltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        btnVoltar.setOnClickListener(v -> finish());
     }
 }

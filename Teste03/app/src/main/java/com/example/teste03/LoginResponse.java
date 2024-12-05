@@ -1,10 +1,13 @@
 package com.example.teste03;
 
 public class LoginResponse {
-    private boolean success;
-    private String message;
-    // Inclua outros campos se necessários, como tokens ou informações do usuário
+    private int id;
+    private String name;
+    private String matricula;
+    private boolean funcionario;
 
-    public boolean isSuccess() { return success; }
-    public String getMessage() { return message; }
+    public int getId() { return id; }
+    public String getName() { return name; }
+    public String getMatricula() { return matricula; }
+    public boolean isFuncionario() { return funcionario; }
 }

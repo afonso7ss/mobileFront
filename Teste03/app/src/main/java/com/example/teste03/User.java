@@ -3,7 +3,11 @@ package com.example.teste03;
 public class User {
     private int id;
     private String name;
-    private String email;
+    private String matricula;
+    private boolean funcionario;
 
-    // Getters e Setters
+    public int getId() { return id; }
+    public String getName() { return name; }
+    public String getMatricula() { return matricula; }
+    public boolean isFuncionario() { return funcionario; }
 }

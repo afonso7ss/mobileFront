@@ -20,9 +20,17 @@ public class ChamadosAbertosActivity extends AppCompatActivity {
 
     private ListView listChamadosAbertos;
     private ArrayAdapter<String> adapter;
+
+    // Lista completa dos chamados obtidos do backend
     private ArrayList<CadastroChamadoActivity.Chamado> chamadosList = new ArrayList<>();
+    // Lista filtrada de acordo com o filtro selecionado (aberto ou fechado)
+    private ArrayList<CadastroChamadoActivity.Chamado> filteredChamados = new ArrayList<>();
     private ArrayList<String> chamadosStringList = new ArrayList<>();
+
     private Button btnAbertos, btnFechados, btnSair;
+
+    // Mantém o estado do filtro atual: true = exibindo apenas chamados abertos, false = apenas fechados
+    private boolean currentFilter = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,22 +45,42 @@ public class ChamadosAbertosActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, chamadosStringList);
         listChamadosAbertos.setAdapter(adapter);
 
+        // Carrega todos os chamados do servidor
         carregarChamados();
+
+        // Filtro para chamados abertos
         btnAbertos.setOnClickListener(v -> filtrarChamados(true));
+
+        // Filtro para chamados fechados
         btnFechados.setOnClickListener(v -> filtrarChamados(false));
-        btnSair.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ChamadosAbertosActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
+
+        // Sair da tela
+        btnSair.setOnClickListener(v -> {
+            Intent intent = new Intent(ChamadosAbertosActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        // Ao clicar em um chamado da lista, vamos alternar o status
+        listChamadosAbertos.setOnItemClickListener((parent, view, position, id) -> {
+            // Obtém o chamado correspondente ao item clicado
+            CadastroChamadoActivity.Chamado chamadoClicado = filteredChamados.get(position);
+
+            // Alterna o status: se estiver aberto (true), muda para fechado (false). Se estiver fechado, muda para aberto.
+            chamadoClicado.status = !chamadoClicado.status;
+
+            // Atualiza a lista de acordo com o filtro atual
+            filtrarChamados(currentFilter);
+
+            // Exemplo de notificação ao usuário
+            String novoStatus = chamadoClicado.status ? "Aberto" : "Fechado";
+            Toast.makeText(ChamadosAbertosActivity.this, "Chamado agora está: " + novoStatus, Toast.LENGTH_SHORT).show();
         });
     }
 
     private void carregarChamados() {
         ApiService apiService = RetrofitClient.getApiService();
-        Call<List<CadastroChamadoActivity.Chamado>> call = apiService.chamados();
+        Call<List<CadastroChamadoActivity.Chamado>> call = apiService.getChamados();
 
         call.enqueue(new Callback<List<CadastroChamadoActivity.Chamado>>() {
             @Override
@@ -61,7 +89,7 @@ public class ChamadosAbertosActivity extends AppCompatActivity {
                     chamadosList.clear();
                     chamadosList.addAll(response.body());
 
-                    // Exibir apenas chamados com status true inicialmente
+                    // Exibir apenas chamados com status true (aberto) inicialmente
                     filtrarChamados(true);
                 } else {
                     Toast.makeText(ChamadosAbertosActivity.this, "Erro ao carregar chamados!", Toast.LENGTH_SHORT).show();
@@ -76,18 +104,23 @@ public class ChamadosAbertosActivity extends AppCompatActivity {
     }
 
     private void filtrarChamados(boolean status) {
+        // Atualiza o filtro atual
+        currentFilter = status;
+
         chamadosStringList.clear();
+        filteredChamados.clear();
 
         for (CadastroChamadoActivity.Chamado chamado : chamadosList) {
-            boolean chamadoStatus = Boolean.parseBoolean(chamado.status);
-            if (chamadoStatus == status) {
-                if (chamadoStatus == true) {
-                    String chamadoString = "Categoria: " + chamado.categoria + "\nLocal: " + chamado.local + "\nDescrição: " + chamado.descricao + "\nStatus: " + "Aberto";
-                    chamadosStringList.add(chamadoString);
-                } else if (chamadoStatus == false) {
-                    String chamadoString = "Categoria: " + chamado.categoria + "\nLocal: " + chamado.local + "\nDescrição: " + chamado.descricao + "\nStatus: " + "Fechado";
-                    chamadosStringList.add(chamadoString);
-                }
+            if (chamado.status == status) {
+                // Monta a string de exibição
+                String statusString = chamado.status ? "Aberto" : "Fechado";
+                String chamadoString = "Categoria: " + chamado.categoria
+                        + "\nLocal: " + chamado.local
+                        + "\nDescrição: " + chamado.descricao
+                        + "\nStatus: " + statusString;
+
+                chamadosStringList.add(chamadoString);
+                filteredChamados.add(chamado);
             }
         }
 

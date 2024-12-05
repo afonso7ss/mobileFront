@@ -1,8 +1,6 @@
 package com.example.teste03;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,7 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 public class DetalhesChamadoActivity extends AppCompatActivity {
 
     private TextView tvDetalhesDescricao;
-    private Button btnResolverChamado;
+    // Se quiser permitir resolver o chamado, descomente o botão e a lógica
+    // private Button btnResolverChamado;
+
     private CadastroChamadoActivity.Chamado chamado;
 
     @Override
@@ -19,27 +19,40 @@ public class DetalhesChamadoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detalhes_chamado);
 
         tvDetalhesDescricao = findViewById(R.id.tvDetalhesDescricao);
-//        btnResolverChamado = findViewById(R.id.btnResolverChamado);
+        // btnResolverChamado = findViewById(R.id.btnResolverChamado);
 
         // Pegar o index do chamado passado pelo intent
         int index = getIntent().getIntExtra("index", -1);
-        if (index != -1) {
+
+        if (index != -1 && index < CadastroChamadoActivity.chamados.size()) {
             chamado = CadastroChamadoActivity.chamados.get(index);
-            tvDetalhesDescricao.setText("Categoria: " + chamado.categoria + "\nLocal: " + chamado.local + "\nDescrição: " + chamado.descricao + "\nStatus: " + (chamado.status.equals("pendente") ? "Em Aberto" : "Resolvido"));
+
+            String statusText = chamado.status ? "Resolvido" : "Em Aberto";
+
+            tvDetalhesDescricao.setText("Categoria: " + chamado.categoria +
+                    "\nLocal: " + chamado.local +
+                    "\nDescrição: " + chamado.descricao +
+                    "\nStatus: " + statusText);
         }
 
-//        btnResolverChamado.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // Lógica para marcar o chamado como resolvido
-//                if (chamado != null && chamado.status.equals("pendente")) {
-//                    chamado.status = "resolvido";
-//                    tvDetalhesDescricao.setText("Categoria: " + chamado.categoria + "\nLocal: " + chamado.local + "\nDescrição: " + chamado.descricao + "\nStatus: Resolvido");
-//                    Toast.makeText(DetalhesChamadoActivity.this, "Chamado marcado como resolvido", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Toast.makeText(DetalhesChamadoActivity.this, "Chamado já está resolvido", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
+        // Caso deseje um botão para resolver o chamado, descomente o código abaixo:
+        /*
+        btnResolverChamado.setOnClickListener(v -> {
+            if (chamado != null) {
+                // Se o chamado está em aberto (status = false)
+                if (!chamado.status) {
+                    chamado.status = true; // marcar como resolvido
+                    String statusText = "Resolvido";
+                    tvDetalhesDescricao.setText("Categoria: " + chamado.categoria +
+                                                "\nLocal: " + chamado.local +
+                                                "\nDescrição: " + chamado.descricao +
+                                                "\nStatus: " + statusText);
+                    Toast.makeText(DetalhesChamadoActivity.this, "Chamado marcado como resolvido", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(DetalhesChamadoActivity.this, "Chamado já está resolvido", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        */
     }
 }
