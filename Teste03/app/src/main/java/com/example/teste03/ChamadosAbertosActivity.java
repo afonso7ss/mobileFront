@@ -61,20 +61,19 @@ public class ChamadosAbertosActivity extends AppCompatActivity {
             finish();
         });
 
-        // Ao clicar em um chamado da lista, vamos alternar o status
+        // Ao clicar em um chamado da lista, vamos alternar o status e atualizar no servidor
         listChamadosAbertos.setOnItemClickListener((parent, view, position, id) -> {
             // Obtém o chamado correspondente ao item clicado
             CadastroChamadoActivity.Chamado chamadoClicado = filteredChamados.get(position);
 
-            // Alterna o status: se estiver aberto (true), muda para fechado (false). Se estiver fechado, muda para aberto.
+            // Guarda o status antigo para caso haja falha na atualização no servidor
+            boolean oldStatus = chamadoClicado.status;
+
+            // Alterna o status localmente
             chamadoClicado.status = !chamadoClicado.status;
 
-            // Atualiza a lista de acordo com o filtro atual
-            filtrarChamados(currentFilter);
-
-            // Exemplo de notificação ao usuário
-            String novoStatus = chamadoClicado.status ? "Aberto" : "Fechado";
-            Toast.makeText(ChamadosAbertosActivity.this, "Chamado agora está: " + novoStatus, Toast.LENGTH_SHORT).show();
+            // Atualiza o status no servidor
+            atualizarStatusNoServidor(chamadoClicado, oldStatus);
         });
     }
 
@@ -114,10 +113,11 @@ public class ChamadosAbertosActivity extends AppCompatActivity {
             if (chamado.status == status) {
                 // Monta a string de exibição
                 String statusString = chamado.status ? "Aberto" : "Fechado";
-                String chamadoString = "Categoria: " + chamado.categoria
-                        + "\nLocal: " + chamado.local
-                        + "\nDescrição: " + chamado.descricao
-                        + "\nStatus: " + statusString;
+                String chamadoString = "ID: " + chamado.id +
+                        "\nCategoria: " + chamado.categoria +
+                        "\nLocal: " + chamado.local +
+                        "\nDescrição: " + chamado.descricao +
+                        "\nStatus: " + statusString;
 
                 chamadosStringList.add(chamadoString);
                 filteredChamados.add(chamado);
@@ -128,5 +128,37 @@ public class ChamadosAbertosActivity extends AppCompatActivity {
 
         String mensagem = status ? "Chamados Abertos" : "Chamados Fechados";
         Toast.makeText(this, mensagem, Toast.LENGTH_SHORT).show();
+    }
+
+    private void atualizarStatusNoServidor(CadastroChamadoActivity.Chamado chamado, boolean oldStatus) {
+        ApiService apiService = RetrofitClient.getApiService();
+
+        // Faz a requisição PUT para atualizar o status do chamado no backend
+        Call<CadastroChamadoActivity.Chamado> call = apiService.atualizarStatusChamado(chamado.id, chamado);
+        call.enqueue(new Callback<CadastroChamadoActivity.Chamado>() {
+            @Override
+            public void onResponse(Call<CadastroChamadoActivity.Chamado> call, Response<CadastroChamadoActivity.Chamado> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    String novoStatus = chamado.status ? "Aberto" : "Fechado";
+                    Toast.makeText(ChamadosAbertosActivity.this, "Chamado agora está: " + novoStatus, Toast.LENGTH_SHORT).show();
+
+                    // Atualiza a lista de acordo com o filtro atual
+                    filtrarChamados(currentFilter);
+                } else {
+                    // Se a resposta não foi bem sucedida, reverte o status local
+                    chamado.status = oldStatus;
+                    Toast.makeText(ChamadosAbertosActivity.this, "Falha ao atualizar status no servidor!", Toast.LENGTH_SHORT).show();
+                    filtrarChamados(currentFilter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CadastroChamadoActivity.Chamado> call, Throwable t) {
+                // Falha na requisição, reverte o status local
+                chamado.status = oldStatus;
+                Toast.makeText(ChamadosAbertosActivity.this, "Erro de rede: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                filtrarChamados(currentFilter);
+            }
+        });
     }
 }

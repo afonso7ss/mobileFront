@@ -51,7 +51,7 @@ public class CadastroChamadoActivity extends AppCompatActivity {
             String descricao = etDescricao.getText().toString().trim();
 
             if (!local.isEmpty() && !descricao.isEmpty()) {
-                // Cria o chamado com status false (aberto)
+                // Cria o chamado com status true (Aberto)
                 Chamado chamado = new Chamado(categoria, local, descricao, true);
                 cadastrarChamado(userId, chamado);
             } else {
@@ -61,6 +61,7 @@ public class CadastroChamadoActivity extends AppCompatActivity {
 
         btnVerHistorico.setOnClickListener(v -> {
             Intent intent = new Intent(CadastroChamadoActivity.this, HistoricoChamadoActivity.class);
+            intent.putExtra("userId", userId);
             startActivity(intent);
         });
 
@@ -99,11 +100,12 @@ public class CadastroChamadoActivity extends AppCompatActivity {
     }
 
     public static class Chamado {
-        int id; // Adicione este campo
+        int id;
         String categoria;
         String local;
         String descricao;
         boolean status;
+        int userId; // Incluindo userId para ficar completo, caso o backend retorne isso
 
         Chamado(String categoria, String local, String descricao, boolean status) {
             this.categoria = categoria;
@@ -115,45 +117,28 @@ public class CadastroChamadoActivity extends AppCompatActivity {
         public Chamado() {
         }
 
-        // Getters e Setters
         public int getId() {
             return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
         }
 
         public String getCategoria() {
             return categoria;
         }
 
-        public void setCategoria(String categoria) {
-            this.categoria = categoria;
-        }
-
         public String getLocal() {
             return local;
-        }
-
-        public void setLocal(String local) {
-            this.local = local;
         }
 
         public String getDescricao() {
             return descricao;
         }
 
-        public void setDescricao(String descricao) {
-            this.descricao = descricao;
-        }
-
         public boolean isStatus() {
             return status;
         }
 
-        public void setStatus(boolean status) {
-            this.status = status;
+        public int getUserId() {
+            return userId;
         }
     }
 }

@@ -28,5 +28,7 @@ public interface ApiService {
 
     @PUT("chamados/{chamadoId}")
     Call<CadastroChamadoActivity.Chamado> atualizarStatusChamado(@Path("chamadoId") int chamadoId, @Body CadastroChamadoActivity.Chamado chamado);
+    @GET("users/{userId}/chamados")
+    Call<List<CadastroChamadoActivity.Chamado>> getChamadosDoUsuario(@Path("userId") int userId);
 
 }
