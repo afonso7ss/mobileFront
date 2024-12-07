@@ -115,7 +115,7 @@ public class HistoricoChamadoActivity extends AppCompatActivity {
             layoutChamado.addView(statusView);
             layoutChamado.addView(textView);
 
-            // Ao clicar no chamado, passar todos os dados via Intent para DetalhesChamadoActivity
+            // assa
             layoutChamado.setOnClickListener(v -> {
                 Intent intent = new Intent(HistoricoChamadoActivity.this, DetalhesChamadoActivity.class);
                 intent.putExtra("id", chamado.getId());
